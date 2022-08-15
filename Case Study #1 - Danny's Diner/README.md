@@ -5,8 +5,9 @@
 ### **Table of contents:**
 
 - [Introduction](#introduction)
-- [Problem Statement](#problem%20statement)
-- [Entity Relationship Diagram](#entity%20relationship%20diagram)
+- [Problem Statement](#problem-statement)
+- [Example Datasets](#example-datasets)
+- [Case Study Questions](#case-study-questions)
 
 ## Introduction
 
