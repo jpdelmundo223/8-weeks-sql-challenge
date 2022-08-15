@@ -1,6 +1,6 @@
 # Case Study #1 - Danny's Diner
 
-![Pizza Runner](https://8weeksqlchallenge.com/images/case-study-designs/2.png)
+<img src="https://8weeksqlchallenge.com/images/case-study-designs/2.png" alt="Pizza Runer" width="500"/>
 
 ### **Table of contents:**
 
