@@ -122,7 +122,7 @@ WHERE
 	sales.product_id = menu.product_id
 GROUP BY sales.customer_id
 
--- 9. If each $1 spent equates to points and sushi has a 2x points multiplier - how many points would each customer have?
+-- 9. If each $1 spent equates to 10 points and sushi has a 2x points multiplier - how many points would each customer have?
 SELECT subquery_tbl.customer, 
 	SUM(subquery_tbl.points) as [total_points]
 FROM (SELECT sales.customer_id AS [customer], -- Start of inner/subquery ...
