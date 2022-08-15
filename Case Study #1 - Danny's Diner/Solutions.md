@@ -20,6 +20,12 @@ _Output:_
 | B | $74 |
 | C | $36 |
 
+#### <strong>Notes:</strong>
+
+- Used [SUM()](https://docs.microsoft.com/en-us/sql/t-sql/functions/sum-transact-sql?view=sql-server-ver16), to get the total amount (menu.price) for each customer (sales.customer_id)
+- Used `DISTINCT`, to eliminate duplicate values within a field.
+- Used `AS`, for renaming/providing an alias to a field
+
 ### 2. How many days has each customer visited the restaurant?
 
 ```sql
@@ -82,6 +88,34 @@ _Output:_
 
 ### 5. Which item was the most popular for each customer?
 
+```sql
+;WITH favorite_item_cte AS (
+	SELECT sales.customer_id AS [customer],
+		menu.product_name,
+		COUNT(menu.product_name) AS [product_count],
+		DENSE_RANK() OVER(PARTITION BY sales.customer_id ORDER BY COUNT(menu.product_name) DESC) AS [rank]
+	FROM weekone.sales sales
+	JOIN weekone.menu menu
+	ON
+		sales.product_id = menu.product_id
+	GROUP BY sales.customer_id, menu.product_name
+)
+
+SELECT favorite_item_cte.customer,
+	favorite_item_cte.product_name
+FROM favorite_item_cte
+WHERE favorite_item_cte.rank = '1'
+```
+
+_Output:_
+| customer | favorite_item_on_menu |
+|---|---|
+| A | ramen |
+| B | sushi |
+| B | curry |
+| B | ramen |
+| C | ramen |
+
 ### 6. Which item was purchased first by the customer after they became a member?
 
 ```sql
@@ -106,6 +140,38 @@ _Output:_
 | customer | product_name |
 |---|---|
 | A | ramen |
+| B | sushi |
+
+### 7. Which item was purchased just before the customer became a member?
+
+```sql
+;WITH table_cte AS (
+	SELECT sales.customer_id AS [customer],
+		menu.product_name,
+		DENSE_RANK() OVER (PARTITION BY sales.customer_id ORDER BY sales.order_date DESC) AS [rank],
+		order_date
+	FROM weekone.sales sales
+	RIGHT JOIN weekone.members members
+	ON
+		sales.customer_id = members.customer_id AND
+		sales.order_date < members.join_date
+	JOIN weekone.menu menu
+	ON
+		sales.product_id = menu.product_id
+)
+
+SELECT table_cte.customer,
+	table_cte.product_name
+FROM table_cte
+WHERE
+	table_cte.rank = '1'
+```
+
+_Output:_
+| customer | product_name |
+|---|---|
+| A | sushi |
+| A | curry |
 | B | sushi |
 
 ### 8. What is the total items and amount spent for each member before they became a member?
